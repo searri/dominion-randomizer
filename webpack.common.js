@@ -19,12 +19,12 @@ module.exports = function(isProduction) {
       rules: ["./src/rules-page.ts", "./styles/rules.styl"],
     },
     output: {
+      publicPath: "/dominion-randomizer/",
       path: path.resolve(__dirname, "docs"),
       filename: "[name]-[contenthash].js"
     },
     module: {
-      rules: [
-        {
+      rules: [{
           test: /\.vue$/,
           loader: "vue-loader",
           options: {
@@ -51,14 +51,15 @@ module.exports = function(isProduction) {
           type: "javascript/auto",
           loader: "@intlify/vue-i18n-loader"
         },
-        { 
+        {
           test: /\.pug$/,
           use: ["pug-loader"],
         },
         {
           test: /\.styl$/,
-          use: [
-            {loader: MiniCssExtractPlugin.loader},
+          use: [{
+              loader: MiniCssExtractPlugin.loader
+            },
             "css-loader",
             "stylus-loader"
           ]
@@ -99,4 +100,4 @@ module.exports = function(isProduction) {
       }),
     ]
   }
-} 
+}
