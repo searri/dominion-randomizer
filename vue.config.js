@@ -4,5 +4,5 @@ const {
 } = require('@vue/cli-service')
 
 module.exports = defineConfig({
-    publicPath: "/dominion-randomizer/"
+    publicPath: ""
 })

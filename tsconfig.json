@@ -16,7 +16,7 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "target": "es5",
-    "baseUrl": "./dominion-randomizer/",
+    "baseUrl": "/dominion-randomizer/",
     "paths": {
         "*" : ["types/*"]
     },
