@@ -96,7 +96,7 @@ class MenuItem {
 }
 
 const MENU_ITEMS = [
-  new MenuItem(MenuItemType.RANDOMIZER, "Randomizer", "/"),
+  new MenuItem(MenuItemType.RANDOMIZER, "Randomizer", "/dominion-randomizer/"),
   new MenuItem(MenuItemType.SETS, "Recommended Kingdoms", "/dominion-randomizer/sets.html"),
   new MenuItem(MenuItemType.RULES, "Rules", "/dominion-randomizer/rules.html"),
 ];

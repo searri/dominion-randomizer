@@ -59,14 +59,14 @@ export default class Modifiers extends Vue {
     if (this.metadata.useColonies) {
       modifiers.push({
         name: this.$tc("colonies_and_platinums"),
-        imageUrl: "/img/cards/prosperity_coloniesplatinums.png",
+        imageUrl: "/dominion-randomizer/img/cards/prosperity_coloniesplatinums.png",
         className: "use-colonies"
       });
     }
     if (this.metadata.useShelters) {
       modifiers.push({
         name: this.$tc("shelters"),
-        imageUrl: "/img/cards/darkages_shelters.png",
+        imageUrl: "/dominion-randomizer/img/cards/darkages_shelters.png",
         className: "use-shelters"
       });
     }
