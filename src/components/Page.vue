@@ -14,7 +14,7 @@
       <header>
         <div class="title-container">
           <h1 class="title">
-            <a class="title_link" href="/dominion-randomizer/index.html">Dominion Randomizer</a>
+            <a class="title_link" href="/dominion-randomizer/index.html">Rick's Dominion Randomizer</a>
           </h1>
           <h2 class="tagline">{{ subtitle }}</h2>
         </div>
