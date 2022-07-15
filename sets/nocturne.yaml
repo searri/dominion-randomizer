@@ -402,24 +402,24 @@ cards:
     isTreasure: false
     isVictory: false
 
-  - name: Cobbler
-    cost:
-      treasure: 5
-      potion: 0
-      debt: 0
-    isAction: false
-    isActionSupplier: false
-    isAttack: false
-    isBuySupplier: false
-    isDrawer: false
-    isDoom: false
-    isDuration: true
-    isFate: false
-    isNight: true
-    isReaction: false
-    isTrashing: false
-    isTreasure: false
-    isVictory: false    
+  # - name: Cobbler
+  #   cost:
+  #     treasure: 5
+  #     potion: 0
+  #     debt: 0
+  #   isAction: false
+  #   isActionSupplier: false
+  #   isAttack: false
+  #   isBuySupplier: false
+  #   isDrawer: false
+  #   isDoom: false
+  #   isDuration: true
+  #   isFate: false
+  #   isNight: true
+  #   isReaction: false
+  #   isTrashing: false
+  #   isTreasure: false
+  #   isVictory: false    
 
   - name: Crypt
     cost:

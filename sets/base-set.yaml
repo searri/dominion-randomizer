@@ -1,15 +1,15 @@
 name: Dominion
 cards:  
-  - name: Adventurer
-    cost:
-      treasure: 6
-      potion: 0
-    isAttack: false
-    isAction: true
-    isTreasure: false
-    isVictory: false
-    isTrashing: false
-    isReaction: false
+  # - name: Adventurer
+  #   cost:
+  #     treasure: 6
+  #     potion: 0
+  #   isAttack: false
+  #   isAction: true
+  #   isTreasure: false
+  #   isVictory: false
+  #   isTrashing: false
+  #   isReaction: false
 
   - name: Bureaucrat
     cost:
@@ -35,27 +35,27 @@ cards:
     isTrashing: false
     isReaction: false
 
-  - name: Chancellor
-    cost:
-      treasure: 3
-      potion: 0
-    isAttack: false
-    isAction: true
-    isTreasure: false
-    isVictory: false
-    isTrashing: false
-    isReaction: false
+  # - name: Chancellor
+  #   cost:
+  #     treasure: 3
+  #     potion: 0
+  #   isAttack: false
+  #   isAction: true
+  #   isTreasure: false
+  #   isVictory: false
+  #   isTrashing: false
+  #   isReaction: false
 
-  - name: Chapel
-    cost:
-      treasure: 2
-      potion: 0
-    isAttack: false
-    isAction: true
-    isTreasure: false
-    isVictory: false
-    isTrashing: true
-    isReaction: false
+  # - name: Chapel
+  #   cost:
+  #     treasure: 2
+  #     potion: 0
+  #   isAttack: false
+  #   isAction: true
+  #   isTreasure: false
+  #   isVictory: false
+  #   isTrashing: true
+  #   isReaction: false
 
   - name: Council Room
     cost:
@@ -71,16 +71,16 @@ cards:
     isReaction: false
     isBuySupplier: true
 
-  - name: Feast
-    cost:
-      treasure: 4
-      potion: 0
-    isAttack: false
-    isAction: true
-    isTreasure: false
-    isVictory: false
-    isTrashing: false
-    isReaction: false
+  # - name: Feast
+  #   cost:
+  #     treasure: 4
+  #     potion: 0
+  #   isAttack: false
+  #   isAction: true
+  #   isTreasure: false
+  #   isVictory: false
+  #   isTrashing: false
+  #   isReaction: false
 
   - name: Festival
     cost:
@@ -95,16 +95,16 @@ cards:
     isActionSupplier: true
     isBuySupplier: true
 
-  - name: Gardens
-    cost:
-      treasure: 4
-      potion: 0
-    isAttack: false
-    isAction: false
-    isTreasure: false
-    isVictory: true
-    isTrashing: false
-    isReaction: false
+  # - name: Gardens
+  #   cost:
+  #     treasure: 4
+  #     potion: 0
+  #   isAttack: false
+  #   isAction: false
+  #   isTreasure: false
+  #   isVictory: true
+  #   isTrashing: false
+  #   isReaction: false
 
   - name: Laboratory
     cost:
@@ -200,40 +200,40 @@ cards:
     isTrashing: true
     isReaction: false
 
-  - name: Smithy
-    cost:
-      treasure: 4
-      potion: 0
-    isAttack: false
-    isAction: true
-    isDrawer: true
-    isMultiDrawer: true
-    isTreasure: false
-    isVictory: false
-    isTrashing: false
-    isReaction: false
+  # - name: Smithy
+  #   cost:
+  #     treasure: 4
+  #     potion: 0
+  #   isAttack: false
+  #   isAction: true
+  #   isDrawer: true
+  #   isMultiDrawer: true
+  #   isTreasure: false
+  #   isVictory: false
+  #   isTrashing: false
+  #   isReaction: false
 
-  - name: Spy
-    cost:
-      treasure: 4
-      potion: 0
-    isAttack: true
-    isAction: true
-    isTreasure: false
-    isVictory: false
-    isTrashing: false
-    isReaction: false
+  # - name: Spy
+  #   cost:
+  #     treasure: 4
+  #     potion: 0
+  #   isAttack: true
+  #   isAction: true
+  #   isTreasure: false
+  #   isVictory: false
+  #   isTrashing: false
+  #   isReaction: false
 
-  - name: Thief
-    cost:
-      treasure: 4
-      potion: 0
-    isAttack: true
-    isAction: true
-    isTreasure: false
-    isVictory: false
-    isTrashing: false
-    isReaction: false
+  # - name: Thief
+  #   cost:
+  #     treasure: 4
+  #     potion: 0
+  #   isAttack: true
+  #   isAction: true
+  #   isTreasure: false
+  #   isVictory: false
+  #   isTrashing: false
+  #   isReaction: false
 
   - name: Throne Room
     cost:
@@ -283,13 +283,13 @@ cards:
     isReaction: false
     isBuyProvider: true
 
-  - name: Workshop
-    cost:
-      treasure: 3
-      potion: 0
-    isAttack: false
-    isAction: true
-    isTreasure: false
-    isVictory: false
-    isTrashing: false
-    isReaction: false
+  # - name: Workshop
+  #   cost:
+  #     treasure: 3
+  #     potion: 0
+  #   isAttack: false
+  #   isAction: true
+  #   isTreasure: false
+  #   isVictory: false
+  #   isTrashing: false
+  #   isReaction: false
