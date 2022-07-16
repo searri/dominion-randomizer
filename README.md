@@ -1,11 +1,11 @@
 # Dominion Randomizer (aka Kingdom Creator)
 
-https://www.dominionrandomizer.com is a kingdom randomizer, or card picker, for Dominion.
+https://www.dominionrandomizer.com is a kingdom randomizer, or card picker, for Dominion. This is a fork specifically for the cards I own.
 
 Feel free to make any improvements you see fit and send me a pull request!
 
 ## Development
-This is a static site served through GitHub Pages. Check the `/docs` directory in `master` to see the source currently being served at http://www.dominionrandomizer.com.
+This is a static site served through GitHub Pages. Check the `/docs` directory in `master` to see the source currently being served at http://searri.github.io/dominion-randomizer.
 
 ### Commands
 
