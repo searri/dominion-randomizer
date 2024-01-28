@@ -3,4 +3,4 @@ import { store } from "./stores/sets-store";
 import { initialize } from "./setup";
 import { createRouter } from "./router";
 
-initialize(createRouter(["/rules.html"], Rules), store);
+initialize(createRouter(["/dominion-randomizer/rules.html"], Rules), store);

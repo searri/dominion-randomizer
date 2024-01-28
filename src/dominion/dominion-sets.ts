@@ -46,6 +46,19 @@ export class DominionSets {
     return sets;
   }
 
+  public static getRicksSets(): DominionSet[] {
+    const sets: DominionSet[] = [];
+    const setIds = Object.keys(DominionSets.sets);
+    const excluded = ["alchemy", "allies", "baseset2", "darkages", "hinterlands", "intrigue", "menagerie", "promos", "prosperity", "renaissance"];
+    let remaining = setIds.filter(x => !excluded.includes(x));
+
+    for (let setId of remaining) {
+      console.log(setId)
+      sets.push(DominionSets.sets[setId as SetId] as DominionSet);
+    }
+    return sets;
+  }
+
   public static getAllCards(): Card[] {
     const cards: Card[] = [];
     const cardIds = Object.keys(DominionSets.cards);

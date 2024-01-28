@@ -19,6 +19,7 @@ module.exports = function(isProduction) {
       rules: ["./src/rules-page.ts", "./styles/rules.styl"],
     },
     output: {
+      publicPath: "/dominion-randomizer/",
       path: path.resolve(__dirname, "docs"),
       filename: "[name]-[contenthash].js"
     },

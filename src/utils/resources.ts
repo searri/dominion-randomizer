@@ -1,8 +1,8 @@
 import { Language } from "../i18n/language";
 
-const IMAGE_PREFEX = "/img/cards";
-const BOXES_IMAGE_PREFEX = "/img/boxes";
-const RULE_PDF_PREFEX = "/rules";
+const IMAGE_PREFEX = "/dominion-randomizer/img/cards";
+const BOXES_IMAGE_PREFEX = "/dominion-randomizer/img/boxes";
+const RULE_PDF_PREFEX = "/dominion-randomizer/rules";
 const PNG_SET_IMAGES = new Set(["alchemy", "cornucopia", "guilds"]);
 const FR_no_images = new Set(["allies", "seaside2", "prosperity2", "hinterlands2", "plunder"])
 

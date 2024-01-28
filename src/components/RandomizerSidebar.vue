@@ -131,7 +131,7 @@ export default class RandomizerSidebar extends Vue {
       readonly randomizerSettings!: RandomizerSettings;
 
   get sets() {
-    return DominionSets.getAllSets().filter(set => {return (HideMultipleVersionSets.indexOf(set.setId) == -1)});
+    return DominionSets.getRicksSets().filter(set => {return (HideMultipleVersionSets.indexOf(set.setId) == -1)});
   }
 
   get selectedSetIds() {
