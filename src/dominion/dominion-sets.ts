@@ -49,7 +49,7 @@ export class DominionSets {
   public static getRicksSets(): DominionSet[] {
     const sets: DominionSet[] = [];
     const setIds = Object.keys(DominionSets.sets);
-    const excluded = ["alchemy", "allies", "baseset2", "darkages", "hinterlands", "intrigue", "menagerie", "promos", "prosperity", "renaissance"];
+    const excluded = ["alchemy", "allies", "baseset2", "darkages", "hinterlands", "intrigue", "menagerie", "promos", "prosperity", "renaissance", "plunder"];
     let remaining = setIds.filter(x => !excluded.includes(x));
 
     for (let setId of remaining) {
