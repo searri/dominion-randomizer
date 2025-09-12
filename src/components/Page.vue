@@ -206,7 +206,7 @@ export default defineComponent({
 
         for (let i = 0; i < MENU_ITEMS.length; i++) {
           const menuItem = MENU_ITEMS[i];
-          const translatedTitle = t(menuItem.title);
+          const translatedTitle = t(menuItem!.title);
           const itemWidth = translatedTitle.length * 6 + 90;
 
           if (currentWidth + itemWidth > totalWidth) {
