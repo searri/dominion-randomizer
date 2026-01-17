@@ -25,27 +25,47 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
-import { State } from "vuex-class";
-import { Card } from "../dominion/card";
-import { Language } from "../i18n/language";
-import TextOverlay from "./TextOverlay.vue";
+/* import Vue, typescript */
+import { defineComponent, computed } from 'vue';
+import type { PropType } from 'vue';
 
-const LANGUAGES_WITH_TRANSLATED_CARDS = new Set([Language.ENGLISH, Language.FRENCH]);
+/* import Dominion Objects and type*/
+import type { Card } from '../dominion/card';
+import { IMAGES_MISSING_FROM_TRANSLATIONS, LANGUAGES_WITH_TRANSLATED_CARDS } from '../dominion/set-id.ts'
 
-@Component({
+/* import store  */
+import { usei18nStore } from "../pinia/i18n-store";
+import { Language } from '../i18n/language';
+
+/* import Components */
+import TextOverlay from './TextOverlay.vue';
+
+export default defineComponent({
+  name: "CardOverlay",
   components: {
-    TextOverlay
-  }
-})
-export default class CardOverlay extends Vue {
-  @Prop() readonly card!: Card;
-  @State(state => state.i18n.language) readonly language!: Language;
+    TextOverlay,
+  },
+  props: {
+    card: {
+      type: Object as PropType<Card>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const i18nStore = usei18nStore();
 
-  get hasCardName() {
-    return !LANGUAGES_WITH_TRANSLATED_CARDS.has(this.language);
-  }
-}
+    const language = computed(() => i18nStore.language);
+    const hasCardName = computed(() => {
+      return !LANGUAGES_WITH_TRANSLATED_CARDS.has(language.value) ||
+        IMAGES_MISSING_FROM_TRANSLATIONS.get(language.value)?.has(props.card.setId);
+    });
+  
+    return {
+      // language,
+      hasCardName,
+    };
+  },
+});
 </script>
 
 <style scoped>

@@ -1,12 +1,14 @@
-import {Ally} from "./ally";
 import {Boon} from "./boon";
 import {SupplyCard} from "./supply-card";
 import {Event} from "./event";
 import {Landmark} from "./landmark";
 import {Project} from "./project";
-import {SetId} from "./set-id";
+import {OtherCard} from "./other-card";
+import type {SetId} from "./set-id";
 import {Way} from "./way";
+import {Ally} from "./ally";
 import {Trait} from "./trait";
+import {Prophecy} from "./prophecy";
 
 export class DominionSet {
   constructor(
@@ -19,7 +21,9 @@ export class DominionSet {
     readonly boons: Boon[],
     readonly ways: Way[],
     readonly allies: Ally[],
-    readonly traits: Trait[]) {
+    readonly traits: Trait[],
+    readonly prophecies: Prophecy[],
+    readonly otherCards: OtherCard[]) {
   }
 
   public static fromJson(json: any) {
@@ -33,6 +37,9 @@ export class DominionSet {
         (json["boons"] || []).map(Boon.fromJson),
         (json["ways"] || []).map(Way.fromJson),
         (json["allies"] || []).map(Ally.fromJson),
-        (json["traits"] || []).map(Trait.fromJson));
+        (json["traits"] || []).map(Trait.fromJson),
+        (json["prophecies"] || []).map(Prophecy.fromJson),
+        (json["othercards"] || []).map(OtherCard.fromJson)
+    );
   }
 }

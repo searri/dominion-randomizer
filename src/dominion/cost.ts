@@ -1,4 +1,4 @@
-import {CostType} from "./cost-type"
+import { CostType } from "./cost-type"
 
 export class Cost {
   constructor(
@@ -8,6 +8,12 @@ export class Cost {
   }
 
   getType(): CostType {
+    if (this.potion > 0) {
+      return CostType.WITH_POTION;
+    }
+    if (this.debt > 0) {
+      return CostType.WITH_DEBT;
+    }
     const costs: CostType[] = [
       CostType.TREASURE_2_OR_LESS,
       CostType.TREASURE_2_OR_LESS,
@@ -19,7 +25,7 @@ export class Cost {
       CostType.TREASURE_7,
       CostType.TREASURE_8_OR_MORE,
     ];
-    return costs[Math.min(this.treasure, 8)];
+    return costs[Math.min(this.treasure, 8)] as CostType;
   }
 
   public static fromJson(json: any) {

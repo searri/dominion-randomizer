@@ -1,75 +1,133 @@
-# Dominion Randomizer (aka Kingdom Creator)
+## KingdomCreator
+###### based on Dominion Randomizer (aka Kingdom Creator) from Blakevanlan
+###### reworked by gillesgros
 
 https://www.dominionrandomizer.com is a kingdom randomizer, or card picker, for Dominion. This is a fork specifically for the cards I own.
 
-Feel free to make any improvements you see fit and send me a pull request!
+Feel free to propose any improvements you see fit and send me a pull request!
 
+### Changelog
+**2025/09/12 - 6.6.0** New Release
+    **Fix & Feat** (see [Changelog.md](./Changelog.md))
+
+**2025/07/24 - 6.5.0** New Release
+    **Fix & Feat** (see [Changelog.md](./Changelog.md))
+
+**2025/05/20 - 6.4.7** New Release
+    **Fix & Feat** (see [Changelog.md](./Changelog.md))  
+
+**2025/01/12 - 6.4.5** New Release  
+    **Fix & Feat** (see [Changelog.md](./Changelog.md))
+
+**2025/01/02 - 6.4.4** New Release
+    **Fix & Feat** (see [Changelog.md](./Changelog.md))
+
+**2024/12/28 - 6.4.3** New Release
+    **Fix & Feat** (see [Changelog.md](./Changelog.md))
+
+**2024/12/23 - 6.4.2** New Release
+  Feat - RisingSun : handle prophecies, riverboat and approaching army
+  Feat - add option to exclude cards from randomization
+  Feat - Recommended kingdoms: Add a link to start building a randomized deck based on it
+  Fix & Feat (see [Changelog.md](./Changelog.md))
+
+2024/09/24 - 6.3.1
+New Release
+  Fix (see [Changelog.md](./Changelog.md))
+
+2024/09/23 - 6.3.0
+New Release
+  Fix & Feat (see [Changelog.md](./Changelog.md))
+  
+2024/07/10 - 6.2.0
+New release
+  Fixing enlargde display for Addons, Boons, Allies
+
+2024/07/08 - 6.1.0
+New release
+  Fixing boon display
+
+2024/07/04 - 6.1.0
+New release
+  add German rules and box
+  add menu for new set tools
 ## Development
 This is a static site served through GitHub Pages. Check the `/docs` directory in `master` to see the source currently being served at http://searri.github.io/dominion-randomizer.
 
-### Commands
+It uses vue 3, vite.js, Pinia, vue-i18n and node.js v20
 
-`npm start` - Run the development server with hot reloading at `localhost:8080`
+##### Rendering
+This is a static site.
+https://www.dominionrandomizer.com : served through GitHub Pages and deployed at each commit. Check the `/docs` directory in **master** to see the source currently being served.
+
+
+##### Commands
+`npm run Gen` - build translation file locate at src/i18n/locales/messages/{lang}
+                based on the translation maintained in `/process/ressources`
+                Run the development server with hot reloading 
+`npm run dev` - Run the development server with hot reloading 
 
 `npm run build` - Builds the static site and outputs the assets in `/docs`
 
-`npm run serve-static` - Serves the build assets from `/docs` in case you want to check the built version
+`npm run preview` - Serves the build assets from `/docs` in case you want to check the built version
 
-### Docker Container
-
-Dominion Randomizer can also be served from a Docker container with the
-following commands:
-
-```shell
-# Build the site
-$ npm run build
-
-# Build the Docker image
-$ sudo docker build --tag "kingdom_creator:latest" .
-
-# Start a container from the built image. This will be published on local port
-# 9999, but that can be changed as needed.
-$ sudo docker run \
-    --detach \
-    --name="kingdom_creator" \
-    --publish="9999:80" \
-    --volume="$(pwd)/docs://usr/share/nginx/html:ro" \
-    "kingdom_creator:latest"
-```
+## Updates based on Dominion Expansion evolutions
+Following new updates on http://wiki.dominionstrategy.com some adjustements need to be made.
+Work in Progress can be seen at https://71yeti.fr served at through a personal site.
 
 ### To add a new set
+#### build set file
+The first step is to create the "setname".yaml file based on models located at `/sets`
+Remember that entries with false are nonmandatory.
+Add all cards to allow correct box content display
 
-to get images from dominionstrategy.com
+#### get images
+To get images from dominionstrategy.com
+> - Add a type if needed. You will need to code a bit.
+>   This might occur in file `./process/Get_CardImage_linkForAtrwork_Illustrator.js`
+>   in function: `getCards()
+>   and in file `./process/resize.js`
+>   in function: `isHorizontal()`
 
-add type if needed. You will need to code a bit
-run either from directory "./process" : 
-`node download.js`
-but you will need to create some directories
-or run it from kingdom_creator root directory : 
-`node process/download.js`
-Images will be created for english version.
+You will be guided thru the type of info, the set and cards selection.
 
-to build kingdom file related to an expansion use
-`coffee kigndom.coffee`
-with in file kingdom.coffee
-string variable set with kingdom list 
+to execute `cd process` run `node Get_CardImage_linkForAtrwork_Illustrator.js`
+Images will be created for english version at `process/processed/docs/img/cards/setname`
+You will need to move them to `/docs/img/cards/setname`
+
+#### add translations
+if the file `process\ressources\Pages.xlsx` add all the entries for the cards to translate.
+
+The Cards translation generation is included in `npm run Gen` command
+
+The translataion source is Pages.xlsx for all the expansions.
+it generates a csv file: `./resources/pages.csv` in `process` folder
+It will create for each language defined at line 2 of page.csv, files in 
+`./src/i18n/messages/${lang}` for dominionrandomizer pages and
+a file per set in `./src/i18n/messages/${lang}/cards` with card name translation for this set.
+
+The feature can be use standalone with `cd process` and run `node Build-translation-pages.js`
+the generated files will be located in `/process/processed/src/i18n/messages/${lang}` for dominionrandomizer pages and
+a file per set in `/process/processed/src/i18n/messages/${lang}/cards` with card name translation for this set.
+
+#### Build kingdoms
+To build kingdom file related to an expansion use
+`cd process` run `node GenerateKigndom.js`
+with in file GenerateKigndom.js
+add the string variable contaning the kingdom list 
+example : 
+```
+Kingdoms["alchemy"] = [
+  "Forbidden Arts: Apprentice, Familiar, Possession, University, Cellar, Council Room, Gardens, Laboratory, Thief, Throne Room",
+  ...
+  "Pools, Tools, and Fools: Apothecary, Apprentice, Golem, Scrying Pool, Baron, Coppersmith, Ironworks, Nobles, Trading Post,  Wishing Well",
+];
 strings = ["Introduction: Cartographer, Crossroads, Develop, Jack of all Trades, Margrave, Nomads, Oasis, Spice Merchant, Stables, Weaver"]
+```
 
 
-to translate cards in process directory 
-Use `node extract-card-names-concat.js`
-to create `src\i18n\messages\cards.{lang}.json` with card name translation
-The source is 1 file for each expansion
-pattern is `./process/resources/cards_translations - {expansion}.csv`
+### Usefull Personnal full set-up
 
-to translate cards in process directory 
-Use `node extract-card-names.js`
-to create `src\i18n\messages\cards.{lang}.json` with card name translation
-The source is 1 file for all the expansions
-patern is `./process/resources/cards_translations.csv`
-
-to translate set name in process directory 
-Use `node extract-set-names.js`
-to create `src\i18n\messages\sets.{lang}.json` with card name translation
-The source is 1 file for all the expansions
-patern is `./process/resources/sets_name.csv`
+##### npm-check-updates 
+to upgrades your package.json dependencies to the latest versions, ignoring specified versions.
+`npm install -global npm-check-updates`

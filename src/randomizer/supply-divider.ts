@@ -1,6 +1,6 @@
 import {Range} from "../utils/range";
 import {SegmentedRange} from "../utils/segmented-range";
-import {SupplyCard} from "../dominion/supply-card";
+import type {SupplyCard} from "../dominion/supply-card";
 import {SupplyDivision} from "./supply-division";
 import {getRandomInts} from "../utils/rand";
 
@@ -10,23 +10,23 @@ export abstract class SupplyDivider {
 
   public subdivideDivisions(divisions: SupplyDivision[]): SupplyDivision[] {
     const newDivisions: SupplyDivision[] = [];
-    const countsPerDivision = this.getRandomizedCountsPerDivision(divisions);
+    const countsPerDivision = this.getRandomizedCountsPerDivision(divisions) ?? [];
 
     for (let i = 0; i < divisions.length; i++) {
       const division = divisions[i];
-      const remainingDivisionTotalCount = division.totalCount - countsPerDivision[i];
+      const remainingDivisionTotalCount = division!.totalCount - (countsPerDivision[i] ?? 0);
 
       if (remainingDivisionTotalCount > 0) {
-        const remainingCards = this.getRemainingCards(division);
+        const remainingCards = this.getRemainingCards(division as SupplyDivision);
         const remainingDivision =
             new SupplyDivision(remainingCards, [], [], remainingDivisionTotalCount, new Map());
         newDivisions.push(remainingDivision);
       }
 
-      if (countsPerDivision[i] > 0) {
-        const satisfyingCards = this.getSatisfyingCards(division);
+      if (countsPerDivision[i] ?? 0 > 0) {
+        const satisfyingCards = this.getSatisfyingCards(division as SupplyDivision);
         const satisfyingDivision =
-            new SupplyDivision(satisfyingCards, [], [], countsPerDivision[i], new Map());
+            new SupplyDivision(satisfyingCards, [], [], countsPerDivision[i] ?? 0, new Map());
         newDivisions.push(satisfyingDivision);
       }
     }
@@ -42,7 +42,7 @@ export abstract class SupplyDivider {
     let sumOfMins = 0;
 
     const countsPerDivision: number[] = [];
-    for (let range of ranges) {
+    for (const range of ranges) {
       const minCount = range.start;
       countsPerDivision.push(minCount);
       sumOfMins += minCount;
@@ -65,9 +65,9 @@ export abstract class SupplyDivider {
     // Allocate the remaining card counts to random divisions. Divisions with more matching
     // cards are more likely to receive the additional cards.
     const randomIndices = getRandomInts(numberToRandomize, segmentedRange.length);
-    for (let index of randomIndices) {
+    for (const index of randomIndices) {
       const divisionIndex = segmentedRange.getSegmentForIndex(index);
-      countsPerDivision[divisionIndex] += 1;
+      countsPerDivision[divisionIndex] = (countsPerDivision[divisionIndex] ?? 0) + 1;
     }
 
     return countsPerDivision;
@@ -78,10 +78,10 @@ export abstract class SupplyDivider {
     const ranges: Range[] = [];
     for (let i = 0; i < satisfyingCardsPerDivision.length; i++) {
       const cards = satisfyingCardsPerDivision[i];
-      const unfilledCount = divisions[i].unfilledCount;
-      const remainingCount = divisions[i].availableCards.length - cards.length;
+      const unfilledCount = divisions[i]!.unfilledCount;
+      const remainingCount = divisions[i]!.availableCards.length - cards!.length;
       const min = Math.max(unfilledCount - remainingCount, 0);
-      const max = Math.min(unfilledCount, cards.length);
+      const max = Math.min(unfilledCount, cards!.length);
       ranges.push(Range.createFromIndices(min, max));
     }
     return ranges
@@ -89,7 +89,7 @@ export abstract class SupplyDivider {
 
   private getSatisfyingCardsPerDivision(divisions: SupplyDivision[]): SupplyCard[][] {
     const satisfyingCardsPerDivision: SupplyCard[][] = [];
-    for (let division of divisions) {
+    for (const division of divisions) {
       satisfyingCardsPerDivision.push(this.getSatisfyingCards(division));
     }
     return satisfyingCardsPerDivision;
@@ -97,7 +97,7 @@ export abstract class SupplyDivider {
 
   private createSegmentedRangeFromRanges(ranges: Range[]): SegmentedRange {
     const lengths: number[] = [];
-    for (let range of ranges) {
+    for (const range of ranges) {
       lengths.push(range.length);
     }
     return new SegmentedRange(0, lengths);

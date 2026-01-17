@@ -4,15 +4,18 @@ export enum Language {
   FRENCH = "fr",
   GERMAN = "de",
   SPANISH = "es",
-  POLISH ="pl"
+  POLISH ="pl",
+  ITALIAN = "it"
 }
 
-export function getLanguage(value: string) {
+export const defaultLanguage = Language.ENGLISH;
+
+export function getLanguage(value: string) :Language {
   const [prefix] = value.split("-");
   for (const key of Object.keys(Language)) {
     if (Language[key as keyof typeof Language] == prefix) {
       return Language[key as keyof typeof Language];
     }
   }
-  return Language.ENGLISH;
+  return defaultLanguage;
 }

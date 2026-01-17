@@ -1,5 +1,5 @@
 import {Boon} from "./boon";
-import {Card} from "./card";
+import type {Card} from "./card";
 import {DominionSet} from "./dominion-set";
 import {Event} from "./event";
 import {Landmark} from "./landmark";
@@ -9,6 +9,9 @@ import {SupplyCard} from "./supply-card";
 import {Way} from "./way";
 import {Ally} from "./ally";
 import {Trait} from "./trait";
+import {Prophecy} from "./prophecy";
+import type { CardType } from "./card-type";
+import { OtherCard } from "./other-card";
 
 declare global {
   interface Window { DominionSets: any; }
@@ -29,21 +32,40 @@ export class DominionSets {
 
   public static convertToSetIdSafe(stringSetId: string): SetId | null {
     const setIds = Object.keys(SetId);
-    for (let setId of setIds) {
+    for (const setId of setIds) {
       if (SetId[setId as keyof typeof SetId] == stringSetId) {
         return stringSetId as SetId;
       }
     }
     return null;
   }
-
+  
+  public static GenericConvertToSetId(stringSetId: string) {
+    const setIds = Object.keys(SetId);
+    for (const setId of setIds) {
+      if (SetId[setId as keyof typeof SetId] == stringSetId) {
+        return stringSetId as SetId;
+      }
+    }
+    return stringSetId as SetId;
+  }
+  
   public static getAllSets(): DominionSet[] {
     const sets: DominionSet[] = [];
     const setIds = Object.keys(DominionSets.sets);
-    for (let setId of setIds) {
+    for (const setId of setIds) {
       sets.push(DominionSets.sets[setId as SetId] as DominionSet);
     }
-    return sets;
+    return sets.sort((n1,n2) => {
+      if (n1.setId > n2.setId) { return 1; }
+      if (n1.setId < n2.setId) { return -1;}
+      return 0;
+      });
+  }
+  public static getAllSetsIds(): SetId[] {
+    const sets: DominionSet[] = [];
+    const setIds = Object.keys(DominionSets.sets) as SetId[]
+    return setIds.sort()
   }
 
   public static getRicksSets(): DominionSet[] {
@@ -62,8 +84,8 @@ export class DominionSets {
   public static getAllCards(): Card[] {
     const cards: Card[] = [];
     const cardIds = Object.keys(DominionSets.cards);
-    for (let cardId of cardIds) {
-      cards.push(DominionSets.cards[cardId]);
+    for (const cardId of cardIds) {
+      cards.push(DominionSets.cards[cardId] as Card);
     }
     return cards;
   }
@@ -82,6 +104,22 @@ export class DominionSets {
 
   public static getSupplyCardById(cardId: string): SupplyCard {
     const card = DominionSets.getCardById(cardId);
+    if (!(card instanceof SupplyCard)) {
+      throw new Error(`Card id (${cardId}) does not refer to a supply card`);
+    }
+    return card;
+  }
+
+  public static getSupplyCardByIdSetFiltered(cardId: string, filteredSet:string[]): SupplyCard {
+    let card;
+    for (const set of filteredSet) {
+      try {
+        card = DominionSets.getCardById(set+'_'+cardId);
+        break;
+      } catch (e) {
+        // Silently catch failed lookups.
+      }
+    }
     if (!(card instanceof SupplyCard)) {
       throw new Error(`Card id (${cardId}) does not refer to a supply card`);
     }
@@ -144,36 +182,154 @@ export class DominionSets {
     return card;
   }
 
+  public static getProphecyById(cardId: string): Prophecy {
+    const card = DominionSets.getCardById(cardId);
+    if (!(card instanceof Prophecy)) {
+      throw new Error(`Card id (${cardId}) does not refer to a prophecy`);
+    }
+    return card;
+  }
+
+  public static isLandscape(cardId: string): boolean {
+
+    const landscapeOtherCards = ["Hexes", "States"];
+
+      const card = DominionSets.getCardById(cardId);
+      if (card instanceof Event) return true
+      if (card instanceof Landmark) return true
+      if (card instanceof Project) return true
+      if (card instanceof Boon) return true
+      if (card instanceof Way) return true
+      if (card instanceof Ally) return true
+      if (card instanceof Trait) return true
+      if (card instanceof Prophecy) return true
+      if (card instanceof OtherCard) {
+        if (landscapeOtherCards.includes(card.type)) return true
+      }
+      return false;
+
+  }
+
   private static createSets() {
     const setIds = Object.keys(window.DominionSets) as SetId[];
     const sets: {[key in SetId]?: DominionSet} = {};
-    for (let setId of setIds) {
+    for (const setId of setIds) {
       sets[setId] = DominionSet.fromJson(window.DominionSets[setId]);
     }
+    //sets[SetId.GUILDSCORNUCOPIA] = mergeSets(sets[SetId.CORNUCOPIA] as DominionSet, 
+    //                                         sets[SetId.GUILDS] as DominionSet)
     return sets;
   }
 
   private static createCardMap() {
     const cards: {[index: string]: Card} = {};
     const setIds = Object.keys(DominionSets.sets);
-    for (let setId of setIds) {
+    const extension = "";
+    for (const setId of setIds) {
       const set = DominionSets.sets[setId as SetId] as DominionSet;
       const cardsFromSet: Card[] = 
-          (set.supplyCards as Card[]).concat(
-            set.events, 
-            set.landmarks, 
-            set.projects, 
-            set.ways, 
-            set.boons, 
-            set.allies, 
-            set.traits);
-      for (let card of cardsFromSet) {
+          (set.otherCards as Card[]).concat(
+            set.supplyCards, set.events, set.landmarks, set.projects, 
+            set.ways, set.boons, set.allies, set.traits, set.prophecies);
+      for (const card of cardsFromSet) {
         cards[card.id] = card;
-        if (!cards[card.shortId]) {
-          cards[card.shortId] = card;
+        if (!cards[card.shortId + extension]) {
+          cards[card.shortId +extension] = card;
         }
       }
     }
     return cards;
   }
 }
+
+/*
+function mergeSets(set1: DominionSet, set2: DominionSet): DominionSet {
+  const mergedSet: DominionSet = {
+    ...set1, 
+    supplyCards: [...set1.supplyCards, ...set2.supplyCards].map((supplyCard1) => {
+      const mergedSupplyCard: SupplyCard = {
+        ...supplyCard1, 
+        setId: SetId.GUILDSCORNUCOPIA, 
+        id: supplyCard1.id.replace('guilds', 'XX').replace('cornucopia', 'XX').replace('XX', 'guildscornucopia'),
+        isOfType: function (cardType: CardType): boolean { return true; }
+      };
+      return mergedSupplyCard;
+    }),
+    events: [...set1.events, ...set2.events].map((event1) => {
+      const mergedEvent: Event = {
+        ...event1, 
+        setId: SetId.GUILDSCORNUCOPIA, 
+        id: event1.id.replace('guilds', 'XX').replace('cornucopia', 'XX').replace('XX', 'guildscornucopia')
+      };
+      return mergedEvent;
+    }),
+    landmarks: [...set1.landmarks, ...set2.landmarks].map((project1) => {
+      const mergedLandmark: Landmark = {
+        ...project1, 
+        setId: SetId.GUILDSCORNUCOPIA, 
+        id: project1.id.replace('guilds', 'XX').replace('cornucopia', 'XX').replace('XX', 'guildscornucopia')
+      };
+      return mergedLandmark;
+    }),
+    projects: [...set1.projects, ...set2.projects].map((project1) => {
+      const mergedProject: Project = {
+        ...project1, 
+        setId: SetId.GUILDSCORNUCOPIA, 
+        id: project1.id.replace('guilds', 'XX').replace('cornucopia', 'XX').replace('XX', 'guildscornucopia')
+      };
+      return mergedProject;
+    }),
+    boons: [...set1.boons, ...set2.boons].map((boon1) => {
+      const mergedBoon: Boon = {
+        ...boon1, 
+        setId: SetId.GUILDSCORNUCOPIA, 
+        id: boon1.id.replace('guilds', 'XX').replace('cornucopia', 'XX').replace('XX', 'guildscornucopia')
+      };
+      return mergedBoon;
+    }),
+    ways: [...set1.ways, ...set2.ways].map((way1) => {
+      const mergedWay: Way = {
+        ...way1, 
+        setId: SetId.GUILDSCORNUCOPIA, 
+        id: way1.id.replace('guilds', 'XX').replace('cornucopia', 'XX').replace('XX', 'guildscornucopia')
+      };
+      return mergedWay;
+    }),
+    allies: [...set1.allies, ...set2.allies].map((ally1) => {
+      const mergedAlly: Ally = {
+        ...ally1, 
+        setId: SetId.GUILDSCORNUCOPIA, 
+        id: ally1.id.replace('guilds', 'XX').replace('cornucopia', 'XX').replace('XX', 'guildscornucopia')
+      };
+      return mergedAlly;
+    }),
+    traits: [...set1.traits, ...set2.traits].map((trait1) => {
+      const mergedTrait: Trait = {
+        ...trait1, 
+        setId: SetId.GUILDSCORNUCOPIA, 
+        id: trait1.id.replace('guilds', 'XX').replace('cornucopia', 'XX').replace('XX', 'guildscornucopia')
+      };
+      return mergedTrait;
+    }),
+    prophecies: [...set1.prophecies, ...set2.prophecies].map((prophecy1) => {
+      const mergedProphecy: Prophecy = {
+        ...prophecy1, 
+        setId: SetId.GUILDSCORNUCOPIA, 
+        id: prophecy1.id.replace('guilds', 'XX').replace('cornucopia', 'XX').replace('XX', 'guildscornucopia')
+      };
+      return mergedProphecy;
+    }),
+    otherCards: [...set1.otherCards, ...set2.otherCards].map((otherCard1) => {
+      const mergedOtherCard: OtherCard = {
+        ...otherCard1, 
+        setId: SetId.GUILDSCORNUCOPIA, 
+        id: otherCard1.id.replace('guilds', 'XX').replace('cornucopia', 'XX').replace('XX', 'guildscornucopia'),
+        isOfType: function (cardType: CardType): boolean { return true; }
+      };
+      return mergedOtherCard;
+    }),
+  };
+  return mergedSet;
+}
+  */
+

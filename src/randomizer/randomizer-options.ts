@@ -1,6 +1,7 @@
-import {CardType} from "../dominion/card-type";
-import {CostType} from "../dominion/cost-type";
+import type {CardType} from "../dominion/card-type";
+import type {CostType} from "../dominion/cost-type";
 import {SetId} from "../dominion/set-id";
+import { useSettingsStore } from '../pinia/settings-store';
 
 export class RandomizerOptions {
   constructor(
@@ -18,8 +19,30 @@ export class RandomizerOptions {
     readonly distributeCost: boolean,
     readonly prioritizeSet: SetId | null,
     readonly baneCardId: string | null,
+    readonly ferrymanCardId: string | null,
+    readonly mousewayCardId: string | null,
+    readonly obeliskCardId: string | null,
+    readonly riverboatCardId: string | null,
+    readonly approachingArmyCardId: string | null,
     readonly useAlchemyRecommendation: boolean,) {
+    this.excludeCardIds = initializeExcludedCardIds(setIds, excludeCardIds);
   }
+}
+
+export const initializeExcludedCardIds = (setIds: SetId[], initialExcludedCardIds: string[]): string[] => {
+  const settingsStore = useSettingsStore();
+  const useConstraints = settingsStore.useConstraintOnRandomization;
+  if (!useConstraints) {
+    return initialExcludedCardIds;
+  }
+  const excludedFromSettings = setIds.reduce((acc, setId) => {
+    const setConstraints = settingsStore.getSetConstraints(setId);
+    if (setConstraints && setConstraints.isSelected && setConstraints.excludedCards) {
+      acc.push(...setConstraints.excludedCards);
+    }
+    return acc;
+  }, [] as string[]);
+  return [...new Set([...initialExcludedCardIds, ...excludedFromSettings])];
 }
 
 export class RandomizerOptionsBuilder {
@@ -37,6 +60,11 @@ export class RandomizerOptionsBuilder {
   distributeCost: boolean = false;
   prioritizeSet: SetId | null = null;
   baneCardId: string | null = null;
+  ferrymanCardId: string | null = null;
+  mousewayCardId: string | null = null;
+  obeliskCardId: string | null = null;
+  riverboatCardId: string | null = null;
+  approachingArmyCardId: string | null = null;
   useAlchemyRecommendation = true;
 
   setSetIds(setIds: SetId[]) {
@@ -50,7 +78,7 @@ export class RandomizerOptionsBuilder {
   }
 
   setExcludeCardIds(excludeCardIds: string[]) {
-    this.excludeCardIds = excludeCardIds;
+    this.excludeCardIds = initializeExcludedCardIds(this.setIds, excludeCardIds);
     return this;
   }
 
@@ -78,7 +106,6 @@ export class RandomizerOptionsBuilder {
     this.requireCardProvider = requireCardProvider;
     return this;
   }
-
 
   setRequireBuyProvider(requireBuyProvider: boolean) {
     this.requireBuyProvider = requireBuyProvider;
@@ -110,6 +137,31 @@ export class RandomizerOptionsBuilder {
     return this;
   }
 
+  setFerrymanCardId(ferrymanCardId: string | null) {
+    this.ferrymanCardId = ferrymanCardId;
+    return this;
+  }
+
+  setMousewayCardId(mousewayCardId: string | null) {
+    this.mousewayCardId = mousewayCardId;
+    return this;
+  }
+
+  setObeliskCardId(obeliskCardId: string | null) {
+    this.obeliskCardId = obeliskCardId;
+    return this;
+  }
+
+  setRiverboatCardId(riverboatCardId: string | null) {
+    this.riverboatCardId = riverboatCardId;
+    return this;
+  }
+
+  setApproachingArmyCardId(approachingArmyCardId: string | null) {
+    this.approachingArmyCardId = approachingArmyCardId;
+    return this;
+  }
+
   setUseAlchemyRecommendation(useAlchemyRecommendation: boolean) {
     this.useAlchemyRecommendation = useAlchemyRecommendation;
     return this;
@@ -131,6 +183,11 @@ export class RandomizerOptionsBuilder {
         this.distributeCost,
         this.prioritizeSet,
         this.baneCardId,
+        this.ferrymanCardId,
+        this.mousewayCardId,
+        this.obeliskCardId,
+        this.riverboatCardId,
+        this.approachingArmyCardId,
         this.useAlchemyRecommendation);
   }
 }

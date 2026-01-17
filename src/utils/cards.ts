@@ -1,22 +1,23 @@
 import {Boon} from "../dominion/boon";
-import {Card} from "../dominion/card";
-import {CardType} from "../dominion/card-type";
-import {CostType} from "../dominion/cost-type";
-import {DominionSet} from "../dominion/dominion-set"
+import type {Card} from "../dominion/card";
+import type {CardType} from "../dominion/card-type";
+import type {CostType} from "../dominion/cost-type";
+import type {DominionSet} from "../dominion/dominion-set"
 import {Event} from "../dominion/event";
 import {Landmark} from "../dominion/landmark";
 import {Project} from "../dominion/project";
-import {SetId} from "../dominion/set-id";
+import type {SetId} from "../dominion/set-id";
 import {SupplyCard} from "../dominion/supply-card";
 import {Way} from "../dominion/way";
 import {Ally} from "../dominion/ally";
 import {Trait} from "../dominion/trait";
+import {Prophecy} from "../dominion/prophecy";
 
 export class Cards {
 
   static getAllCardsFromSets(sets: DominionSet[]): Card[] {
     let cards: Card[] = [];
-    for (let set of sets) {
+    for (const set of sets) {
       cards = cards.concat(Cards.getAllCardsFromSet(set));
     }
     return cards;
@@ -31,6 +32,7 @@ export class Cards {
         (set.boons as Card[]),
         (set.allies as Card[]), 
         (set.traits as Card[]), 
+        (set.prophecies as Card[]), 
         );
   }
 
@@ -62,13 +64,17 @@ export class Cards {
     return Cards.getCardsOfType<Trait>(cards, Trait);
   }
 
+  static getAllProphecies(cards: Card[]): Prophecy[] {
+    return Cards.getCardsOfType<Prophecy>(cards, Prophecy);
+  }
+
   static getAllBoons(cards: Card[]): Boon[] {
     return Cards.getCardsOfType<Boon>(cards, Boon);
   }
 
   private static getCardsOfType<T extends Card>(cards: Card[], constructor: Function): T[] {
     const typedCards: T[] = [];
-    for (let card of cards) {
+    for (const card of cards) {
       if (card instanceof constructor) {
         typedCards.push(card as T);
       }
@@ -96,7 +102,7 @@ export class Cards {
   }
 
   static findCardById<T extends Card>(cards: T[], id: string): T | null {
-    for (let card of cards) {
+    for (const card of cards) {
       if (card.id == id) {
         return card;
       }
@@ -106,7 +112,7 @@ export class Cards {
 
   static filterSetsByAllowedSetIds(sets: DominionSet[], allowedSetIds: SetId[]) {
     const filteredSets: DominionSet[] = [];
-    for (let set of sets) {
+    for (const set of sets) {
       if (allowedSetIds.indexOf(set.setId) != -1) {
         filteredSets.push(set);
       }
@@ -132,7 +138,7 @@ export class Cards {
 
   static filterByAllowedTypes(allowedTypes: CardType[]): (card: SupplyCard) => boolean {
     return (card) => {
-      for (let allowedType of allowedTypes) {
+      for (const allowedType of allowedTypes) {
         if (card.isOfType(allowedType)) {
           return true;
         }
@@ -143,7 +149,7 @@ export class Cards {
 
   static filterByExcludedTypes(excludedTypes: CardType[]): (card: SupplyCard) => boolean {
     return (card) => {
-      for (let excludedType of excludedTypes) {
+      for (const excludedType of excludedTypes) {
         if (card.isOfType(excludedType)) {
           return false;
         }

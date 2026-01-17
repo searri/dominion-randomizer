@@ -267,7 +267,7 @@ cards:
     isFate: false
     isMultiDrawer: false
     isNight: false
-    isReaction: false
+    isReaction: true
     isTrashing: false
     isTreasure: false
     isTerminal: true
@@ -693,3 +693,19 @@ projects:
       treasure: 8
       potion: 0
       debt: 0
+
+othercards:
+  - name: Flag
+    type: Artifacts
+  - name: Horn
+    type: Artifacts
+  - name: Key
+    type: Artifacts
+  - name: Lantern
+    type: Artifacts
+  - name: Treasure Chest
+    type: Artifacts
+  - name: CoffersVillagers_Mat
+    type: Mat Vertical
+  - name: CoinsTokens
+    type: Tokens

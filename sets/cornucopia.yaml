@@ -140,7 +140,7 @@ cards:
     isVictory: false
     isTrashing: false
     isReaction: false
-    isBuySupplier: true
+    isBuySupplier: false
     isActionSupplier: true
 
   - name: Remake
@@ -153,3 +153,15 @@ cards:
     isVictory: false
     isTrashing: true
     isReaction: false
+
+othercards:
+  - name: Bag Of Gold
+    type: Action - Prize
+  - name: Diadem
+    type: Treasure - Prize
+  - name: Followers
+    type: Action - Attack - Prize
+  - name: Princess
+    type: Action - Prize
+  - name: Trusty Steed
+    type: Action - Prize
